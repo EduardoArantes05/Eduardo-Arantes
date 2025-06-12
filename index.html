@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nosso Amor Transborda! ❤️</title>
+    <!-- Inclui Tailwind CSS para um design responsivo e bonito -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Inclui a fonte Inter do Google Fonts para uma tipografia agradável -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Define a fonte padrão para o corpo do documento */
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Garante que o corpo ocupe 100% da altura da viewport e esconde o que ultrapassar */
+            overflow: hidden;
+            position: relative; /* Necessário para posicionar os elementos flutuantes */
+        }
+
+        /* Animação de fade-in e escalada para a caixa principal */
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: translateY(20px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        .animate-fade-in-up {
+            animation: fadeInScale 1s ease-out forwards;
+        }
+
+        /* Animação de batimento cardíaco para o emoji de coração */
+        @keyframes heartBeat {
+            0%, 100% {
+                transform: scale(1);
+            }
+            15% {
+                transform: scale(1.1); /* Um pouco maior */
+            }
+            30% {
+                transform: scale(1);
+            }
+            45% {
+                transform: scale(1.1); /* Um pouco maior novamente */
+            }
+            60% {
+                transform: scale(1);
+            }
+        }
+        .heart-pulse {
+            display: inline-block; /* Garante que a animação funcione corretamente */
+            animation: heartBeat 1.5s infinite; /* Aplica a animação infinitamente */
+        }
+
+        /* Animação para os elementos flutuantes (figurinhas) */
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) scale(0.5); /* Começa na parte inferior, menor */
+                opacity: 0;
+            }
+            20% {
+                opacity: 0.8; /* Atinge opacidade máxima */
+            }
+            80% {
+                opacity: 0.8; /* Mantém opacidade */
+            }
+            100% {
+                transform: translateY(-120vh) scale(1.2); /* Vai para cima da tela, ligeiramente maior */
+                opacity: 0; /* Desaparece */
+            }
+        }
+
+        /* Estilos para os elementos flutuantes */
+        .floating-item {
+            position: absolute;
+            bottom: 0; /* Começa na parte inferior do contêiner */
+            opacity: 0; /* Inicia invisível */
+            pointer-events: none; /* Garante que os elementos não bloqueiem cliques ou interações */
+            animation-name: floatUp; /* Define a animação */
+            animation-timing-function: linear; /* Animação linear */
+            animation-iteration-count: infinite; /* Animação infinita */
+            font-size: 2.5rem; /* Tamanho padrão dos emojis */
+            filter: drop-shadow(0 0 5px rgba(255,255,255,0.5)); /* Leve brilho para destacar */
+            z-index: 0; /* Garante que fique atrás do conteúdo principal */
+        }
+    </style>
+</head>
+<!-- Fundo mais rebuscado com um gradiente de cores suaves e elegantes -->
+<body class="bg-gradient-to-br from-purple-800 via-pink-700 to-rose-600 min-h-screen flex items-center justify-center p-4">
+    <!-- Contêiner para os elementos flutuantes, preenche a tela inteira e está no fundo -->
+    <div id="floating-elements" class="absolute inset-0 pointer-events-none z-0"></div>
+
+    <div class="bg-white rounded-3xl shadow-xl p-8 sm:p-12 text-center max-w-xl w-full border-4 border-rose-200 animate-fade-in-up z-10">
+        <h1 class="text-4xl sm:text-5xl font-bold text-rose-500 mb-6 leading-tight">
+            Nosso Amor Floresce Há... <span class="heart-pulse">❤️</span>
+        </h1>
+        <div id="countdown" class="text-3xl sm:text-4xl font-extrabold text-purple-600 space-y-3 sm:space-y-4">
+            <!-- O tempo de relacionamento será injetado aqui pelo JavaScript -->
+            Carregando...
+        </div>
+        <p class="mt-8 text-xl sm:text-2xl text-gray-700">
+            A cada segundo, um novo capítulo da nossa história de amor. ✨
+        </p>
+        <p class="mt-4 text-lg text-gray-500">
+            Com muito carinho para Gabriela.
+        </p>
+    </div>
+
+    <script>
+        // Define a data de início do relacionamento (Ano, Mês-1, Dia)
+        // O mês em JavaScript é baseado em zero (0 para janeiro, 3 para abril)
+        const startDate = new Date('2024-04-03T00:00:00'); // Começaram a namorar em 03/04/2024
+        const countdownElement = document.getElementById('countdown');
+
+        // Função para atualizar a contagem regressiva
+        function updateCountdown() {
+            const now = new Date(); // Data e hora atual
+
+            // Se a data atual for anterior à data de início (improvável, mas para segurança)
+            if (now.getTime() < startDate.getTime()) {
+                countdownElement.innerHTML = `<p>Ainda não chegamos lá, mas a espera vale a pena!</p>`;
+                return;
+            }
+
+            let years = 0;
+            let months = 0;
+            let days = 0;
+            let hours = 0;
+            let minutes = 0;
+            let seconds = 0;
+
+            // Cria uma cópia mutável da data de início para cálculos iterativos
+            let tempStartDate = new Date(startDate.getTime());
+
+            // Calcula anos exatos
+            // Adiciona um ano e verifica se ainda está no passado em relação à data atual
+            while (true) {
+                let testDate = new Date(tempStartDate);
+                testDate.setFullYear(testDate.getFullYear() + 1);
+                // Se a data de teste (tempStartDate + 1 ano) for menor ou igual à data atual
+                if (testDate.getTime() <= now.getTime()) {
+                    years++; // Incrementa o contador de anos
+                    tempStartDate = testDate; // Avança a tempStartDate para a data testada
+                } else {
+                    break; // Sai do loop se adicionar um ano passar da data atual
+                }
+            }
+
+            // Calcula meses exatos (após já ter calculado os anos)
+            // Adiciona um mês e verifica se ainda está no passado
+            while (true) {
+                let testDate = new Date(tempStartDate);
+                testDate.setMonth(testDate.getMonth() + 1);
+
+                // Verifica se a mudança de mês não causou um 'salto' para o próximo mês devido a dias inválidos
+                // Ex: 31 de janeiro + 1 mês = 2 de março (porque fevereiro não tem 31 dias)
+                // Se o dia do mês não for o mesmo, significa que houve um salto indesejado
+                if (testDate.getDate() !== tempStartDate.getDate()) {
+                    break; // Sai do loop se o mês não puder ser incrementado corretamente
+                }
+
+                // Se a data de teste (tempStartDate + 1 mês) for menor ou igual à data atual
+                if (testDate.getTime() <= now.getTime()) {
+                    months++; // Incrementa o contador de meses
+                    tempStartDate = testDate; // Avança a tempStartDate para a data testada
+                } else {
+                    break; // Sai do loop se adicionar um mês passar da data atual
+                }
+            }
+
+            // Calcula o tempo restante em milissegundos após subtrair anos e meses completos
+            let remainingMillis = now.getTime() - tempStartDate.getTime();
+
+            // Calcula dias, horas, minutos e segundos a partir dos milissegundos restantes
+            days = Math.floor(remainingMillis / (1000 * 60 * 60 * 24));
+            remainingMillis %= (1000 * 60 * 60 * 24); // Remove os dias já contabilizados
+
+            hours = Math.floor(remainingMillis / (1000 * 60 * 60));
+            remainingMillis %= (1000 * 60 * 60); // Remove as horas já contabilizadas
+
+            minutes = Math.floor(remainingMillis / (1000 * 60));
+            remainingMillis %= (1000 * 60); // Remove os minutos já contabilizados
+
+            seconds = Math.floor(remainingMillis / 1000); // Segundos restantes
+
+            // Cria um array para armazenar as partes formatadas do tempo
+            const parts = [];
+            if (years > 0) parts.push(`${years} ano${years !== 1 ? 's' : ''}`);
+            if (months > 0) parts.push(`${months} mês${months !== 1 ? 'es' : ''}`);
+            if (days > 0) parts.push(`${days} dia${days !== 1 ? 's' : ''}`); // Sempre mostra dias, mesmo que seja 0
+            if (hours > 0 || parts.length > 0) parts.push(`${hours} hora${hours !== 1 ? 's' : ''}`); // Mostra horas se > 0 ou se já tiver outras unidades
+            if (minutes > 0 || parts.length > 0) parts.push(`${minutes} minuto${minutes !== 1 ? 's' : ''}`); // Mostra minutos se > 0 ou se já tiver outras unidades
+            parts.push(`${seconds} segundo${seconds !== 1 ? 's' : ''}`); // Sempre mostra segundos
+
+            // Formata a string final, adicionando "e" antes da última parte
+            let formattedTime = parts.join(', ');
+            const lastCommaIndex = formattedTime.lastIndexOf(',');
+            if (lastCommaIndex > -1) {
+                // Substitui a última vírgula por " e "
+                formattedTime = formattedTime.substring(0, lastCommaIndex) + ' e' + formattedTime.substring(lastCommaIndex + 1);
+            }
+
+            // Atualiza o conteúdo do elemento HTML com o tempo formatado
+            countdownElement.innerHTML = `<p>${formattedTime}</p>`;
+        }
+
+        // Atualiza a contagem a cada segundo (1000 milissegundos)
+        setInterval(updateCountdown, 1000);
+        // Chama a função uma vez imediatamente para exibir o tempo ao carregar a página
+        updateCountdown();
+
+        // --- Lógica para as figurinhas flutuantes ---
+        const floatingElementsContainer = document.getElementById('floating-elements');
+        // Lista de emojis fofos para usar
+        const emojis = ['❤️', '✨', '💖', '🌟', '💕', '🌷', '🌸', '💫', '💞', '💜'];
+        const numberOfEmojis = 30; // Quantidade de emojis flutuantes
+
+        // Função para criar e adicionar um emoji flutuante
+        function createFloatingEmoji() {
+            const emoji = emojis[Math.floor(Math.random() * emojis.length)]; // Seleciona um emoji aleatório
+            const div = document.createElement('div');
+            div.className = 'floating-item'; // Aplica a classe CSS para o estilo e animação
+            div.innerHTML = emoji; // Define o emoji como conteúdo da div
+
+            // Gera valores aleatórios para personalizar a animação de cada emoji
+            const startLeft = Math.random() * 100; // Posição horizontal inicial (0 a 100% da tela)
+            const animationDuration = Math.random() * 10 + 8; // Duração da animação (8 a 18 segundos)
+            const animationDelay = Math.random() * 5; // Atraso para iniciar a animação (0 a 5 segundos)
+
+            // Aplica os estilos inline para as propriedades aleatórias
+            div.style.left = `${startLeft}vw`;
+            div.style.animationDuration = `${animationDuration}s`;
+            div.style.animationDelay = `${animationDelay}s`;
+
+            floatingElementsContainer.appendChild(div); // Adiciona o emoji ao contêiner
+        }
+
+        // Gera a quantidade especificada de emojis flutuantes
+        for (let i = 0; i < numberOfEmojis; i++) {
+            createFloatingEmoji();
+        }
+    </script>
+</body>
+</html>
